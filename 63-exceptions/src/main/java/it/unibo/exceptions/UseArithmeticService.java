@@ -4,6 +4,7 @@ import it.unibo.exceptions.fakenetwork.api.NetworkComponent;
 import it.unibo.exceptions.fakenetwork.impl.ServiceBehindUnstableNetwork;
 
 import java.io.PrintStream;
+import java.io.IOException;
 
 import static it.unibo.exceptions.arithmetic.ArithmeticService.DIVIDED;
 import static it.unibo.exceptions.arithmetic.ArithmeticService.MINUS;
@@ -43,19 +44,42 @@ public final class UseArithmeticService {
         assertThrowsException(server, IllegalStateException.class, N_1, TIMES, PLUS, N_2);
     }
 
+    /*
+     * This method should re-try to send message to the provided server, catching all IOExceptions,
+     * until it succeeds.
+     */
     private static void retrySendOnNetworkError(final NetworkComponent server, final String message) {
-        /*
-         * This method should re-try to send message to the provided server, catching all IOExceptions,
-         * until it succeeds.
-         */
+        boolean isSent = false;
+
+        while(!isSent) {
+            try{
+                server.sendData(message);
+                // The message is sent to server -> otherwise throws an Exception
+                isSent = true;
+            }catch (final IOException e) {
+                System.out.println("The message sent an IOException " + e.toString());
+            }
+        }
     }
 
+    /*
+     * This method should re-try to retrieve information from the provided server, catching all IOExceptions,
+     * until it succeeds.
+     */
     private static String retryReceiveOnNetworkError(final NetworkComponent server) {
-        /*
-         * This method should re-try to retrieve information from the provided server, catching all IOExceptions,
-         * until it succeeds.
-         */
-        return null;
+        boolean isReceived = false;
+        String message = null;
+
+        while(!isReceived) {
+            try{
+                message = server.receiveResponse() ;
+                // The message is sent to server -> otherwise throws an Exception
+                isReceived = true;
+            }catch (final IOException e) {
+                System.out.println("The receivement sent an IOException " + e.toString());
+            }
+        }
+        return message;
     }
 
     private static void assertEqualsAsDouble(final String expected, final String actual) {
