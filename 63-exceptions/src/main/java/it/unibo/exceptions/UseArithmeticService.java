@@ -57,7 +57,7 @@ public final class UseArithmeticService {
                 // The message is sent to server -> otherwise throws an Exception
                 isSent = true;
             }catch (final IOException e) {
-                System.out.println("The message sent an IOException " + e.toString());
+                System.out.println("The message sent an IOException " + e.getMessage());
             }
         }
     }
@@ -76,7 +76,7 @@ public final class UseArithmeticService {
                 // The message is received from server -> otherwise throws an Exception
                 isReceived = true;
             }catch (final IOException e) {
-                System.out.println("The receivement sent an IOException " + e.toString());
+                System.out.println("The receivement sent an IOException " + e.getMessage());
             }
         }
         return message;
