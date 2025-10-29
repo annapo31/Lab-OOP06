@@ -73,7 +73,7 @@ public final class UseArithmeticService {
         while(!isReceived) {
             try{
                 message = server.receiveResponse() ;
-                // The message is sent to server -> otherwise throws an Exception
+                // The message is received from server -> otherwise throws an Exception
                 isReceived = true;
             }catch (final IOException e) {
                 System.out.println("The receivement sent an IOException " + e.toString());
