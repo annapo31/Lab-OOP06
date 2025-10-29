@@ -1,6 +1,7 @@
 package it.unibo.exceptions.fakenetwork.impl;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class NetworkException extends IOException {
 
@@ -14,5 +15,7 @@ public class NetworkException extends IOException {
         create a message "Network error while sending message: <message>" */
     public NetworkException(String message) {
         super("Network errorwhile sending message:" + message);
+        // Message could be null
+        Objects.requireNonNull(message);
     }
 }
