@@ -1,4 +1,4 @@
-package it.unibo.exceptions.impl;
+package it.unibo.exceptions.fakenetwork.impl;
 
 import java.io.IOException;
 
