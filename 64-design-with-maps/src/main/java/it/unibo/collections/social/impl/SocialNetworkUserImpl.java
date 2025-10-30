@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package it.unibo.collections.social.impl;
 
 import it.unibo.collections.social.api.SocialNetworkUser;
@@ -27,26 +23,13 @@ import java.util.Set;
  */
 public final class SocialNetworkUserImpl<U extends User> extends UserImpl implements SocialNetworkUser<U> {
 
+
     private Map<String, Set<U>> groups = new HashMap<>();
 
 
     /*
      * [CONSTRUCTORS]
-     *
      */
-    public SocialNetworkUserImpl(
-        final String firstName, 
-        final String lastName,
-        final String userName,
-        final Integer age,
-        ) {
-            super(firstName, lastName, userName, age);
-            // We do not need control because UserImpl does that
-
-            // At the beginning the map is empty
-            this.group = new HashMap<>();
-    }
-
     /**
      * Builds a user participating in a social network.
      *
@@ -61,12 +44,15 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            application
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+        super(name, surname, user, userAge);
     }
 
     /*
      * 2) Define a further constructor where the age defaults to -1
      */
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+        super(name, surname, user, -1);
+    }
 
     /*
      * [METHODS]
@@ -75,7 +61,16 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
-        return false;
+        // Contains all the users in a specific group named 'circle'
+        // we use Set in order to NOT have duplicates
+        final Set<U> circleUser = this.groups.get(circle);
+        // If the group doesn't exit -> It creates a new group and it insert it in the map
+        if(circleUser == null) {
+            circleUser = new HashSet<>();
+            this.groups.put(circle, circleUser);
+            // In questo momento il gruppo è vuoto
+        }
+        return this.groups.add(user);
     }
 
     /**
@@ -85,11 +80,23 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        final Collection<U> usersInGroup = this.groups.get(groupName);
+        if(usersInGroup == null) {
+            return Collections.emptyList();
+        }
+
+        return usersInGroup;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        // It might be repetitions, but it's easier to understand
+        // otherwise we need a Set and, after the opeartions, a casting
+        final List<U> followedUser = new List<>();
+
+        for(List<U> users: groups.values()) {
+            followedUser.addAll(users);
+        }
+        return followedUser;
     }
 }
