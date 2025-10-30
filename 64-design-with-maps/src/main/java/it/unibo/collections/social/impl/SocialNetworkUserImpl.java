@@ -27,29 +27,26 @@ import java.util.Set;
  */
 public final class SocialNetworkUserImpl<U extends User> extends UserImpl implements SocialNetworkUser<U> {
 
-    /*
-     *
-     * [FIELDS]
-     *
-     * Define any necessary field
-     *
-     * In order to save the people followed by a user organized in groups, adopt
-     * a generic-type Map:
-     *
-     * think of what type of keys and values would best suit the requirements
-     */
+    private Map<String, Set<U>> groups = new HashMap<>();
+
 
     /*
      * [CONSTRUCTORS]
      *
-     * 1) Complete the definition of the constructor below, for building a user
-     * participating in a social network, with 4 parameters, initializing:
-     *
-     * - firstName
-     * - lastName
-     * - username
-     * - age and every other necessary field
      */
+    public SocialNetworkUserImpl(
+        final String firstName, 
+        final String lastName,
+        final String userName,
+        final Integer age,
+        ) {
+            super(firstName, lastName, userName, age);
+            // We do not need control because UserImpl does that
+
+            // At the beginning the map is empty
+            this.group = new HashMap<>();
+    }
+
     /**
      * Builds a user participating in a social network.
      *
