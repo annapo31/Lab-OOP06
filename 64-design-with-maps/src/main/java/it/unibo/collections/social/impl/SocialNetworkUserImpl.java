@@ -24,7 +24,7 @@ import java.util.Set;
 public final class SocialNetworkUserImpl<U extends User> extends UserImpl implements SocialNetworkUser<U> {
 
 
-    private Map<String, Set<U>> groups = new HashMap<>();
+    private Map<String, Set<U>> groups;
 
 
     /*
@@ -45,6 +45,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
         super(name, surname, user, userAge);
+        this.groups = new HashMap<>();
     }
 
     /*
@@ -63,14 +64,14 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
     public boolean addFollowedUser(final String circle, final U user) {
         // Contains all the users in a specific group named 'circle'
         // we use Set in order to NOT have duplicates
-        final Set<U> circleUser = this.groups.get(circle);
+        Set<U> circleUser = this.groups.get(circle);
         // If the group doesn't exit -> It creates a new group and it insert it in the map
         if(circleUser == null) {
             circleUser = new HashSet<>();
             this.groups.put(circle, circleUser);
             // In questo momento il gruppo è vuoto
         }
-        return this.groups.add(user);
+        return circleUser.add(user);
     }
 
     /**
@@ -90,13 +91,12 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
 
     @Override
     public List<U> getFollowedUsers() {
-        // It might be repetitions, but it's easier to understand
-        // otherwise we need a Set and, after the opeartions, a casting
-        final List<U> followedUser = new List<>();
+        // With Set -> No repetitions
+        Set<U> followedUser = new HashSet<>();
 
-        for(List<U> users: groups.values()) {
+        for(Set<U> users: groups.values()) {
             followedUser.addAll(users);
         }
-        return followedUser;
+        return new ArrayList<>(followedUser);
     }
 }
